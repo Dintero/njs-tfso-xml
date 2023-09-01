@@ -1,5 +1,1 @@
-dist
-.nyc_output
-coverage
 package-lock.json
-package.json
