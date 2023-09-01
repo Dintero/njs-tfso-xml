@@ -20,12 +20,8 @@ jobs:
         with:
           node-version: "18.x"
 
-      - name: npm access token
-        run: |
-          npm config set @tfso:registry=https://npm.pkg.github.com --userconfig .npmrc
-          npm config set //npm.pkg.github.com/:_authToken=${NPM_TOKEN} --userconfig .npmrc
-        env:
-          NPM_TOKEN: ${{ secrets.NPM_TFSO_TOKEN }}
-
       - name: build project
         run: npm ci
+
+      - name: test project
+        run: npm test
