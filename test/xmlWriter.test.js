@@ -1,6 +1,6 @@
 const XmlReader = require('../src/XmlReader')
 const XmlWriter = require('../src/XmlWriter')
-const chai = require('chai')
+const assert = require('node:assert')
 
 const testData1 = `
 <document>
@@ -33,7 +33,7 @@ describe('XmlWriter', () => {
 
         const finalReader = await XmlReader.parse(writer.toFragmentString())
 
-        chai.expect(finalReader.valAt('nestedlist.nesteditem')).to.equal('1')
+        assert.strictEqual(finalReader.valAt('nestedlist.nesteditem'), '1')
     })
 
     it('should set a raw value', async () => {
@@ -45,7 +45,7 @@ describe('XmlWriter', () => {
 
         const reader = await XmlReader.parse(writer.toString())
 
-        chai.expect(reader.valAt('test')).to.equal('hello!')
+        assert.strictEqual(reader.valAt('test'), 'hello!')
     })
 
     it('should inject several simple values', async () => {
@@ -53,7 +53,8 @@ describe('XmlWriter', () => {
 
         writer.adds('node', ['a', 'b'])
 
-        chai.expect(writer.toString()).to.deep.equal(
+        assert.deepEqual(
+            writer.toString(),
             '<?xml version="1.0" encoding="utf-8"?><Document><node>a</node><node>b</node></Document>'
         )
     })
@@ -66,7 +67,8 @@ describe('XmlWriter', () => {
             prop: 'yo',
         })
 
-        chai.expect(writer.toString()).to.deep.equal(
+        assert.deepEqual(
+            writer.toString(),
             '<?xml version="1.0" encoding="utf-8"?><Document><node prop="yo"><id>a</id></node><node prop="yo"><id>b</id></node></Document>'
         )
     })
