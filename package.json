@@ -3,19 +3,12 @@
   "version": "1.7.0.dintero",
   "main": "./index.js",
   "scripts": {
-    "clean": "rm -rf package-lock.json node_modules",
-    "build": "bash ./build.sh",
     "test": "npm run mocha",
     "mocha": "mocha --exit --recursive --timeout 10000 ./test/**/*.test.js",
-    "lint": "npx eslint src test *.js",
-    "lint:fix": "npm run lint -- --fix",
-    "prettier": "npx prettier . --check",
-    "prettier:fix": "npm run prettier -- --write",
-    "format": "npm run prettier:fix && npm run lint:fix",
-    "cover": "nyc --reporter=html --reporter=text npm run mocha"
+    "prettier": "npx prettier . --check"
   },
   "engines": {
-    "node": ">=18.0"
+    "node": ">=20.0"
   },
   "dependencies": {
     "@xmldom/xmldom": "^0.8.10",
@@ -26,8 +19,6 @@
   },
   "devDependencies": {
     "chai": "^4.3.10",
-    "eslint": "^8.56.0",
-    "eslint-config-prettier": "^9.1.0",
     "mocha": "^10.2.0",
     "prettier": "^3.1.1"
   }
