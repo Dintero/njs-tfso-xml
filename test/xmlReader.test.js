@@ -2,7 +2,7 @@ const XmlReader = require('../src/XmlReader')
 const through2 = require('through2')
 const fs = require('fs')
 const path = require('path')
-const chai = require('chai')
+const assert = require('node:assert')
 
 async function parseWithStream(data, splitOn) {
     return new Promise((resolve, reject) => {
@@ -53,7 +53,7 @@ describe('XmlReader', () => {
 
         const readerAgain = (await parseWithStream(xmlStr))[0]
 
-        chai.expect(reader.data).to.deep.equal(readerAgain.data)
+        assert.deepEqual(reader.data, readerAgain.data)
     })
 
     it('should read+write+read sample file using xml2js and give the same result', async () => {
@@ -68,62 +68,65 @@ describe('XmlReader', () => {
 
         const readerAgain = await XmlReader.parse(xmlStr)
 
-        chai.expect(reader.data).to.deep.equal(readerAgain.data)
+        assert.deepEqual(reader.data, readerAgain.data)
     })
 
     it('should read some basic things', async () => {
         const reader = await XmlReader.parse(testData1)
 
-        chai.expect(reader.attributeAt('test', 'hello')).to.equal('world')
+        assert.deepEqual(reader.attributeAt('test', 'hello'), 'world')
 
-        chai.expect(reader.valAt('list.item.nestedlist.nesteditem')).to.equal(
-            '1'
+        assert.deepEqual(reader.valAt('list.item.nestedlist.nesteditem'), '1')
+
+        assert.strictEqual(reader.has('list'), true)
+
+        assert.strictEqual(reader.has('blarg'), false)
+
+        assert.deepEqual(
+            reader
+                .asArray('list.item.nestedlist.nesteditem')
+                .map((r) => r.val()),
+            ['1', '2']
         )
 
-        chai.expect(reader.has('list')).to.equal(true)
-
-        chai.expect(reader.has('blarg')).to.equal(false)
-
-        chai.expect(
+        assert.deepEqual(
             reader
                 .asArray('list.item.nestedlist.nesteditem')
-                .map((r) => r.val())
-        ).to.deep.equal(['1', '2'])
+                .map((r) => r.attribute('attr')),
+            ['attr1', 'attr2']
+        )
 
-        chai.expect(
-            reader
-                .asArray('list.item.nestedlist.nesteditem')
-                .map((r) => r.attribute('attr'))
-        ).to.deep.equal(['attr1', 'attr2'])
-
-        chai.expect(
+        assert.deepEqual(
             reader
                 .asArrayAll('list.item.nestedlist.nesteditem')
-                .map((r) => r.val())
-        ).to.deep.equal(['1', '2', '3', '4'])
+                .map((r) => r.val()),
+            ['1', '2', '3', '4']
+        )
     })
 
     it('should parse some basic stuff by stream', async () => {
         const readers = await parseWithStream(testData1, 'list.item')
 
-        chai.expect(readers[0].valAt('test')).to.equal('yo')
+        assert.strictEqual(readers[0].valAt('test'), 'yo')
 
-        chai.expect(readers[0].valAt('list.otheritem')).to.equal('yoyo')
+        assert.strictEqual(readers[0].valAt('list.otheritem'), 'yoyo')
 
-        chai.expect(
+        assert.deepEqual(
             readers[0]
                 .asArrayAll('list.item.nestedlist.nesteditem')
-                .map((r) => r.val())
-        ).to.deep.equal(['1', '2'])
+                .map((r) => r.val()),
+            ['1', '2']
+        )
 
-        chai.expect(readers[1].valAt('test')).to.equal('yo')
+        assert.strictEqual(readers[1].valAt('test'), 'yo')
 
-        chai.expect(readers[1].valAt('list.otheritem')).to.equal('yoyo')
+        assert.strictEqual(readers[1].valAt('list.otheritem'), 'yoyo')
 
-        chai.expect(
+        assert.deepEqual(
             readers[1]
                 .asArrayAll('list.item.nestedlist.nesteditem')
-                .map((r) => r.val())
-        ).to.deep.equal(['3', '4'])
+                .map((r) => r.val()),
+            ['3', '4']
+        )
     })
 })
