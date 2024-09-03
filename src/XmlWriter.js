@@ -149,10 +149,13 @@ class XmlWriter {
         const firstPath = parts[0]
         const remainingPath = parts.slice(1).join('.')
 
-        const elem = this._doc.createElementNS(
-            this._doc.documentElement.namespaceURI,
-            firstPath
-        )
+        const elem = this._doc.documentElement.namespaceURI
+            ? this._doc.createElementNS(
+                  this._doc.documentElement.namespaceURI,
+                  firstPath
+              )
+            : this._doc.createElement(firstPath)
+
         this._elem.appendChild(elem)
         const writer = new XmlWriter(this._doc, elem)
 
@@ -184,7 +187,8 @@ class XmlWriter {
 
     setValRaw(raw) {
         const parser = new DOMParser()
-        this._elem.appendChild(parser.parseFromString(raw))
+        const doc = parser.parseFromString(raw, 'text/xml')
+        this._elem.appendChild(this._doc.importNode(doc.documentElement, true))
         return this
     }
 
