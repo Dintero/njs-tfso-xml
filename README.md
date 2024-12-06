@@ -59,23 +59,23 @@ async function main() {
 
 Utils
 
--   static parse(xmlString) -> Parses an xml string and returns a promise with an XmlReader
--   static streamParseFromString(xmlString, splitOn) -> Parses as string, but will break the file up on the splitOn path
--   static streamParse(inputStream, splitOn) -> Parses as string from given stream, but will break the file up on the splitOn path
-    splitOn is a dot-separated path (for example 'list.item').
-    The return value is a readable object stream that pushes XmlReaders.
+- static parse(xmlString) -> Parses an xml string and returns a promise with an XmlReader
+- static streamParseFromString(xmlString, splitOn) -> Parses as string, but will break the file up on the splitOn path
+- static streamParse(inputStream, splitOn) -> Parses as string from given stream, but will break the file up on the splitOn path
+  splitOn is a dot-separated path (for example 'list.item').
+  The return value is a readable object stream that pushes XmlReaders.
 
--   val(defaultValue) -> Returns current text value
--   valAt(path, defaultValue) -> Returns text value at path
--   attribute(name, defaultValue) -> Returns attribute by name
--   attributes() -> Returns all attrbiutes
--   attributeAt(path, name, defaultValue) -> Returns attribute at path and name of attribute
--   has(path) -> Check if path exists
--   keys(path) -> List all children tags (one level deep)
--   asObject(path) -> Create a new XmlReader starting at the given path
--   asArray(path) -> Create an array of XmlReader's at the given path
--   asArrayAll(path) -> Same as asArray, except this will traverse all possible nodes to get there, not just the first
--   toString() -> Returns the current reader data as an xml string. This may not make sense unless you're at the root element
+- val(defaultValue) -> Returns current text value
+- valAt(path, defaultValue) -> Returns text value at path
+- attribute(name, defaultValue) -> Returns attribute by name
+- attributes() -> Returns all attrbiutes
+- attributeAt(path, name, defaultValue) -> Returns attribute at path and name of attribute
+- has(path) -> Check if path exists
+- keys(path) -> List all children tags (one level deep)
+- asObject(path) -> Create a new XmlReader starting at the given path
+- asArray(path) -> Create an array of XmlReader's at the given path
+- asArrayAll(path) -> Same as asArray, except this will traverse all possible nodes to get there, not just the first
+- toString() -> Returns the current reader data as an xml string. This may not make sense unless you're at the root element
 
 The documentTag can be found at reader.documentTag. Paths are excluded the documentTag.
 
