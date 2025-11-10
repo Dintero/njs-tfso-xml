@@ -12,7 +12,7 @@
     "dependencies": {
         "@xmldom/xmldom": "^0.9.8",
         "lodash": "^4.17.21",
-        "sax": "^1.4.2",
+        "sax": "^1.4.3",
         "through2": "^4.0.2",
         "xml2js": "^0.6.2"
     },
