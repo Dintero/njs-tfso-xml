@@ -1,8 +1,10 @@
+const assert = require("node:assert/strict");
+const { describe, test } = require("node:test");
+
 const XmlReader = require("../src/XmlReader");
 const through2 = require("through2");
 const fs = require("node:fs");
 const path = require("node:path");
-const assert = require("node:assert");
 
 async function parseWithStream(data, splitOn) {
     return new Promise((resolve, reject) => {
@@ -41,7 +43,7 @@ const testData1 = `
 `;
 
 describe("XmlReader", () => {
-    it("should read+write+read sample file and give the same result", async () => {
+    test("should read+write+read sample file and give the same result", async () => {
         const data = fs.readFileSync(
             path.join(__dirname, "data/sample.xml"),
             "utf-8",
@@ -56,7 +58,7 @@ describe("XmlReader", () => {
         assert.deepEqual(reader.data, readerAgain.data);
     });
 
-    it("should read+write+read sample file using xml2js and give the same result", async () => {
+    test("should read+write+read sample file using xml2js and give the same result", async () => {
         const data = fs.readFileSync(
             path.join(__dirname, "data/sample.xml"),
             "utf-8",
@@ -71,7 +73,7 @@ describe("XmlReader", () => {
         assert.deepEqual(reader.data, readerAgain.data);
     });
 
-    it("should read some basic things", async () => {
+    test("should read some basic things", async () => {
         const reader = await XmlReader.parse(testData1);
 
         assert.deepEqual(reader.attributeAt("test", "hello"), "world");
@@ -104,7 +106,7 @@ describe("XmlReader", () => {
         );
     });
 
-    it("should parse some basic stuff by stream", async () => {
+    test("should parse some basic stuff by stream", async () => {
         const readers = await parseWithStream(testData1, "list.item");
 
         assert.strictEqual(readers[0].valAt("test"), "yo");
