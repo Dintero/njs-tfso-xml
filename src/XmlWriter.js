@@ -1,6 +1,6 @@
-const DOMImplementation = require('@xmldom/xmldom').DOMImplementation
-const XMLSerializer = require('@xmldom/xmldom').XMLSerializer
-const DOMParser = require('@xmldom/xmldom').DOMParser
+const DOMImplementation = require("@xmldom/xmldom").DOMImplementation;
+const XMLSerializer = require("@xmldom/xmldom").XMLSerializer;
+const DOMParser = require("@xmldom/xmldom").DOMParser;
 
 class XmlWriter {
     /**
@@ -8,8 +8,8 @@ class XmlWriter {
      * @param {Element} elem
      */
     constructor(doc, elem) {
-        this._doc = doc
-        this._elem = elem
+        this._doc = doc;
+        this._elem = elem;
     }
 
     /**
@@ -23,39 +23,39 @@ class XmlWriter {
         namespace,
         namespaceURI,
         schemaLocation,
-        documentName = 'Document'
+        documentName = "Document",
     ) {
-        const { xmlWriter, documentElement } = this.createRaw(
+        const { xmlWriter, documentElement } = XmlWriter.createRaw(
             namespace,
             documentName,
-            'version="1.0" encoding="utf-8"'
-        )
+            'version="1.0" encoding="utf-8"',
+        );
 
         if (namespaceURI && schemaLocation) {
-            documentElement.setAttribute('xmlns:xsi', namespaceURI)
-            documentElement.setAttribute('xsi:schemaLocation', schemaLocation)
+            documentElement.setAttribute("xmlns:xsi", namespaceURI);
+            documentElement.setAttribute("xsi:schemaLocation", schemaLocation);
         }
 
-        return xmlWriter
+        return xmlWriter;
     }
 
     static createRaw(
         namespace,
         documentName,
-        processingIntruction = 'version="1.0" encoding="utf-8"'
+        processingIntruction = 'version="1.0" encoding="utf-8"',
     ) {
-        const dom = new DOMImplementation()
-        const doc = dom.createDocument(namespace, documentName)
+        const dom = new DOMImplementation();
+        const doc = dom.createDocument(namespace, documentName);
 
         doc.insertBefore(
-            doc.createProcessingInstruction('xml', processingIntruction),
-            doc.documentElement
-        )
-        const documentElement = doc.documentElement
+            doc.createProcessingInstruction("xml", processingIntruction),
+            doc.documentElement,
+        );
+        const documentElement = doc.documentElement;
 
-        const xmlWriter = new XmlWriter(doc, documentElement)
+        const xmlWriter = new XmlWriter(doc, documentElement);
 
-        return { xmlWriter, doc, documentElement }
+        return { xmlWriter, doc, documentElement };
     }
 
     /**
@@ -63,7 +63,7 @@ class XmlWriter {
      * @returns {*}
      */
     static fromReader(reader) {
-        const writer = XmlWriter.create('', '', '', reader.currentTag)
+        const writer = XmlWriter.create("", "", "", reader.currentTag);
 
         /**
          * @param {XmlReader} reader
@@ -72,15 +72,16 @@ class XmlWriter {
         const write = (reader, writer) => {
             for (const key of reader.keys()) {
                 for (const obj of reader.asArray(key)) {
-                    const writeChildren = (nextWriter) => write(obj, nextWriter)
-                    writer.add(key, writeChildren, obj.attributes(), obj.val())
+                    const writeChildren = (nextWriter) =>
+                        write(obj, nextWriter);
+                    writer.add(key, writeChildren, obj.attributes(), obj.val());
                 }
             }
-        }
+        };
 
-        write(reader, writer)
+        write(reader, writer);
 
-        return writer
+        return writer;
     }
 
     /**
@@ -96,8 +97,8 @@ class XmlWriter {
      * @returns {XmlWriter}
      */
     add(path, valueOrFunctionOrNull = null, attributes = null, value = null) {
-        this.addAndGet(path, valueOrFunctionOrNull, attributes, value)
-        return this
+        this.addAndGet(path, valueOrFunctionOrNull, attributes, value);
+        return this;
     }
 
     /**
@@ -120,16 +121,16 @@ class XmlWriter {
      */
     adds(path, values, valueOrFunctionOrNull = null, attributes = null) {
         valueOrFunctionOrNull =
-            valueOrFunctionOrNull || ((writer, value) => writer.setVal(value))
+            valueOrFunctionOrNull || ((writer, value) => writer.setVal(value));
         values.forEach((value) => {
             this.addAndGet(
                 path,
                 (writer) => valueOrFunctionOrNull(writer, value),
-                attributes
-            )
-        })
+                attributes,
+            );
+        });
 
-        return this
+        return this;
     }
 
     /**
@@ -143,77 +144,77 @@ class XmlWriter {
         path,
         valueOrFunctionOrNull = null,
         attributes = null,
-        value = null
+        value = null,
     ) {
-        const parts = path.split('.')
-        const firstPath = parts[0]
-        const remainingPath = parts.slice(1).join('.')
+        const parts = path.split(".");
+        const firstPath = parts[0];
+        const remainingPath = parts.slice(1).join(".");
 
         const elem = this._doc.documentElement.namespaceURI
             ? this._doc.createElementNS(
                   this._doc.documentElement.namespaceURI,
-                  firstPath
+                  firstPath,
               )
-            : this._doc.createElement(firstPath)
+            : this._doc.createElement(firstPath);
 
-        this._elem.appendChild(elem)
-        const writer = new XmlWriter(this._doc, elem)
+        this._elem.appendChild(elem);
+        const writer = new XmlWriter(this._doc, elem);
 
         if (remainingPath.length === 0) {
-            if (typeof valueOrFunctionOrNull === 'function') {
+            if (typeof valueOrFunctionOrNull === "function") {
                 if (value !== null) {
-                    writer.setVal(value)
+                    writer.setVal(value);
                 }
-                valueOrFunctionOrNull(writer)
+                valueOrFunctionOrNull(writer);
             } else if (valueOrFunctionOrNull !== null) {
-                writer.setVal(valueOrFunctionOrNull)
+                writer.setVal(valueOrFunctionOrNull);
             }
 
             if (attributes !== null) {
                 Object.keys(attributes).forEach((name) => {
-                    writer.setAttr(name, attributes[name])
-                })
+                    writer.setAttr(name, attributes[name]);
+                });
             }
 
-            return writer
+            return writer;
         }
 
         return writer.addAndGet(
             remainingPath,
             valueOrFunctionOrNull,
-            attributes
-        )
+            attributes,
+        );
     }
 
     setValRaw(raw) {
-        const parser = new DOMParser()
-        const doc = parser.parseFromString(raw, 'text/xml')
-        this._elem.appendChild(this._doc.importNode(doc.documentElement, true))
-        return this
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(raw, "text/xml");
+        this._elem.appendChild(this._doc.importNode(doc.documentElement, true));
+        return this;
     }
 
     setVal(value) {
-        this._elem.textContent = value
-        return this
+        this._elem.textContent = value;
+        return this;
     }
 
     setAttr(name, value) {
-        this._elem.setAttribute(name, value)
-        return this
+        this._elem.setAttribute(name, value);
+        return this;
     }
 
     toString() {
-        const s = new XMLSerializer()
-        return s.serializeToString(this._doc)
+        const s = new XMLSerializer();
+        return s.serializeToString(this._doc);
     }
 
     /**
      * toString of the current document element
      */
     toFragmentString() {
-        const s = new XMLSerializer()
-        return s.serializeToString(this._elem)
+        const s = new XMLSerializer();
+        return s.serializeToString(this._elem);
     }
 }
 
-module.exports = XmlWriter
+module.exports = XmlWriter;

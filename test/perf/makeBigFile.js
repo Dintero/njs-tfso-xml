@@ -1,18 +1,18 @@
-const fs = require('fs')
-const path = require('path')
-const Readable = require('stream').Readable
+const fs = require("node:fs");
+const path = require("node:path");
+const Readable = require("node:stream").Readable;
 
-const filePath = path.join(__dirname, './data', 'big.xml')
+const filePath = path.join(__dirname, "./data", "big.xml");
 
-const stream = fs.createWriteStream(filePath)
+const stream = fs.createWriteStream(filePath);
 
-const output = new Readable()
-output._read = () => {}
+const output = new Readable();
+output._read = () => {};
 
-output.pipe(stream)
+output.pipe(stream);
 
 // Creates approx 1-2GB file
-output.push('<Document>')
+output.push("<Document>");
 for (let x = 0; x < 2000000; x++) {
     output.push(`
     <MyTag1>
@@ -22,7 +22,7 @@ for (let x = 0; x < 2000000; x++) {
             </MyTag3>
         </MyTag2>
     </MyTag1>
-    `)
+    `);
 }
-output.push('</Document>')
-output.push(null)
+output.push("</Document>");
+output.push(null);

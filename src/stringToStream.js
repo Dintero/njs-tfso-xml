@@ -1,16 +1,16 @@
-const ReadableStream = require('stream').Readable
+const ReadableStream = require("node:stream").Readable;
 
 function stringToStream(str) {
-    const stream = new ReadableStream()
-    stream._read = () => {}
+    const stream = new ReadableStream();
+    stream._read = () => {};
 
     // setImmediate allows piping stream before we start filling it
     setImmediate(() => {
-        stream.push(str)
-        stream.push(null)
-    })
+        stream.push(str);
+        stream.push(null);
+    });
 
-    return stream
+    return stream;
 }
 
-module.exports = stringToStream
+module.exports = stringToStream;
