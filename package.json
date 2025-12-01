@@ -4,7 +4,7 @@
     "main": "./index.js",
     "scripts": {
         "test": "mocha --exit --recursive --timeout 10000 ./test/**/*.test.js",
-        "prettier": "prettier . --check"
+        "lint": "biome check"
     },
     "engines": {
         "node": ">=20.0"
@@ -17,7 +17,7 @@
         "xml2js": "^0.6.2"
     },
     "devDependencies": {
-        "mocha": "11.7.5",
-        "prettier": "3.6.2"
+        "@biomejs/biome": "2.3.7",
+        "mocha": "11.7.5"
     }
 }

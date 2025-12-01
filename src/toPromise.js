@@ -3,15 +3,15 @@ function toPromise(func) {
         try {
             func((err, res) => {
                 if (err) {
-                    return reject(err)
+                    return reject(err);
                 }
 
-                return resolve(res)
-            })
+                return resolve(res);
+            });
         } catch (err) {
-            return reject(err)
+            return reject(err);
         }
-    })
+    });
 }
 
-module.exports = toPromise
+module.exports = toPromise;
