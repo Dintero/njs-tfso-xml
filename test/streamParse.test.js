@@ -1,13 +1,15 @@
+const assert = require("node:assert/strict");
+const { describe, test } = require("node:test");
+
 const stringToStream = require("../src/stringToStream");
 const parse = require("../src/parse");
 const streamParse = require("../src/streamParse");
 const through2 = require("through2");
 const fs = require("node:fs");
 const path = require("node:path");
-const assert = require("node:assert");
 
 describe("streamParse", () => {
-    it("should read sample.xml the same way as parse", async () => {
+    test("should read sample.xml the same way as parse", async () => {
         const fileContent = fs.readFileSync(
             path.join(__dirname, "data/sample.xml"),
             "utf-8",
@@ -35,7 +37,7 @@ describe("streamParse", () => {
         assert.deepEqual(data, expectedData);
     });
 
-    it("should read sample2.xml the same way as parse", async () => {
+    test("should read sample2.xml the same way as parse", async () => {
         const fileContent = fs.readFileSync(
             path.join(__dirname, "data/sample2.xml"),
             "utf-8",
@@ -63,7 +65,7 @@ describe("streamParse", () => {
         assert.deepEqual(data, expectedData);
     });
 
-    it("should throw error if bad xml", async () => {
+    test("should throw error if bad xml", async () => {
         const fileContent = "<xml yo!";
 
         const p = new Promise((resolve, reject) => {

@@ -1,7 +1,7 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const through2 = require("through2");
-const streamParse = require("../../src/streamParse");
+const streamParse = require("../src/streamParse");
 
 const filePath = path.join(__dirname, "./data", "big.xml");
 

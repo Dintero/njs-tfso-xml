@@ -1,6 +1,7 @@
+const assert = require("node:assert/strict");
+const { describe, test } = require("node:test");
 const XmlReader = require("../src/XmlReader");
 const XmlWriter = require("../src/XmlWriter");
-const assert = require("node:assert");
 
 const testData1 = `
 <document>
@@ -24,7 +25,7 @@ const testData1 = `
 `;
 
 describe("XmlWriter", () => {
-    it("should be able to print a fragment", async () => {
+    test("should be able to print a fragment", async () => {
         const reader = await XmlReader.parse(testData1);
 
         const subReader = reader.asObject("list.item");
@@ -36,7 +37,7 @@ describe("XmlWriter", () => {
         assert.strictEqual(finalReader.valAt("nestedlist.nesteditem"), "1");
     });
 
-    it("should set a raw value", async () => {
+    test("should set a raw value", async () => {
         const writer = XmlWriter.create("", "", "", "Document");
 
         writer.setValRaw(`
@@ -48,7 +49,7 @@ describe("XmlWriter", () => {
         assert.strictEqual(reader.valAt("test"), "hello!");
     });
 
-    it("should inject several simple values", async () => {
+    test("should inject several simple values", async () => {
         const writer = XmlWriter.create("", "", "", "Document");
 
         writer.adds("node", ["a", "b"]);
@@ -59,7 +60,7 @@ describe("XmlWriter", () => {
         );
     });
 
-    it("should inject several custom values with attributes", async () => {
+    test("should inject several custom values with attributes", async () => {
         const writer = XmlWriter.create("", "", "", "Document");
 
         const items = ["a", "b"];
