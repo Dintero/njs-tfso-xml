@@ -1,5 +1,5 @@
 const _ = require("lodash");
-const through2 = require("through2");
+const through2 = require("through2").default;
 const stringToStream = require("./stringToStream");
 const streamParse = require("./streamParse");
 const parse = require("./parse");

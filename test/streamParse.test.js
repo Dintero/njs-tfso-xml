@@ -4,7 +4,7 @@ const { describe, test } = require("node:test");
 const stringToStream = require("../src/stringToStream");
 const parse = require("../src/parse");
 const streamParse = require("../src/streamParse");
-const through2 = require("through2");
+const through2 = require("through2").default;
 const fs = require("node:fs");
 const path = require("node:path");
 
