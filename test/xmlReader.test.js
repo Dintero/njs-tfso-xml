@@ -2,7 +2,7 @@ const assert = require("node:assert/strict");
 const { describe, test } = require("node:test");
 
 const XmlReader = require("../src/XmlReader");
-const through2 = require("through2");
+const through2 = require("through2").default;
 const fs = require("node:fs");
 const path = require("node:path");
 
