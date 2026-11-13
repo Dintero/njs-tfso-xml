@@ -7,7 +7,7 @@ Utilities for reading and writing xml (public)
 ## Reader
 
 ```js
-const XmlReader = require('njs-tfso-xml').XmlReader
+const XmlReader = require("njs-tfso-xml").XmlReader;
 
 const data = `
 <document>
@@ -27,32 +27,32 @@ const data = `
         </item>
     </list>
 </document>
-`
+`;
 
 async function main() {
-    const reader = await XmlReader.parse(data)
+    const reader = await XmlReader.parse(data);
 
-    reader.attributeAt('test', 'hello')
+    reader.attributeAt("test", "hello");
     // 'world'
 
-    reader.valAt('list.item.nestedlist.nesteditem')
+    reader.valAt("list.item.nestedlist.nesteditem");
     // '1'
 
-    reader.has('list')
+    reader.has("list");
     // true
 
-    reader.has('blarg')
+    reader.has("blarg");
     // false
 
-    reader.asArray('list.item.nestedlist.nesteditem').map((r) => r.val())
+    reader.asArray("list.item.nestedlist.nesteditem").map((r) => r.val());
     // ['1', '2']
 
     reader
-        .asArray('list.item.nestedlist.nesteditem')
-        .map((r) => r.attribute('attr'))
+        .asArray("list.item.nestedlist.nesteditem")
+        .map((r) => r.attribute("attr"));
     // ['attr1', 'attr2']
 
-    reader.asArrayAll('list.item.nestedlist.nesteditem').map((r) => r.val())
+    reader.asArrayAll("list.item.nestedlist.nesteditem").map((r) => r.val());
     // ['1', '2', '3', '4']
 }
 ```
@@ -82,8 +82,8 @@ The documentTag can be found at reader.documentTag. Paths are excluded the docum
 ### Example using streaming parser
 
 ```js
-const XmlReader = require('njs-tfso-xml').XmlReader
-const through2 = require('through2')
+const XmlReader = require("njs-tfso-xml").XmlReader;
+const through2 = require("through2");
 
 const data = `
 <document>
@@ -103,34 +103,38 @@ const data = `
         </item>
     </list>
 </document>
-`
+`;
 
 async function main() {
-    const splitOn = 'list.item'
+    const splitOn = "list.item";
 
     const readers = await new Promise((resolve, reject) => {
-        const readers = []
+        const readers = [];
         XmlReader.streamParseFromString(data, splitOn)
-            .on('end', () => resolve(readers))
-            .on('error', (err) => reject(err))
+            .on("end", () => resolve(readers))
+            .on("error", (err) => reject(err))
             .pipe(
                 through2.obj((chunk, enc, next) => {
-                    readers.push(chunk)
-                    next()
-                })
-            )
-    })
+                    readers.push(chunk);
+                    next();
+                }),
+            );
+    });
 
-    readers[0].valAt('test')
+    readers[0].valAt("test");
     // yo
 
-    readers[0].asArrayAll('list.item.nestedlist.nesteditem').map((r) => r.val())
+    readers[0]
+        .asArrayAll("list.item.nestedlist.nesteditem")
+        .map((r) => r.val());
     // ['1', '2']
 
-    readers[1].valAt('test')
+    readers[1].valAt("test");
     // yo
 
-    readers[1].asArrayAll('list.item.nestedlist.nesteditem').map((r) => r.val())
+    readers[1]
+        .asArrayAll("list.item.nestedlist.nesteditem")
+        .map((r) => r.val());
     // ['3', '4']
 }
 ```
