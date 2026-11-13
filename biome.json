@@ -32,5 +32,10 @@
         "formatter": {
             "trailingCommas": "none"
         }
+    },
+    "yaml": {
+        "formatter": {
+            "indentWidth": 2
+        }
     }
 }
